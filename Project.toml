@@ -1,0 +1,7 @@
+name = "Tools"
+uuid = "1b08a953-4be3-4667-9a23-3db579824955"  # Random UUID
+authors = ["Simone D'Ambrogio <simonedambrogio67@gmail.com>"]
+version = "0.1.0"
+
+[compat]
+julia = "1.11.3"
