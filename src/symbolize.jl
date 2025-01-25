@@ -33,9 +33,10 @@ function symbolize(x::String)
 end
 
 function symbolize(d::Dict)
-    Dict(k => symbolize(v) for (k, v) in d)
+    Dict(symbolize(k) => symbolize(v) for (k, v) in d)
 end
 
 function symbolize(x)
     x  # return unchanged for other types
 end 
+
