@@ -4,9 +4,16 @@ A collection of utility functions for Julia programming.
 
 ## Installation
 
+Since this package is not registered in Julia's General Registry, you can install it directly from GitHub:
+
 ```julia
 using Pkg
-Pkg.add("Tools")
+Pkg.add(url="https://github.com/simonedambrogio/Tools.jl")
+```
+
+Or in Julia's pkg mode (press `]`):
+```julia
+] add https://github.com/simonedambrogio/Tools.jl
 ```
 
 ## Features
