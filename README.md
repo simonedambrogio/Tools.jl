@@ -1,62 +1,64 @@
 # Tools.jl
 
-A collection of utility functions designed to streamline research workflows in Julia.
-
-## Overview
-
-Tools.jl provides a set of helper functions commonly needed in research projects, with a focus on making configuration management and data processing more convenient.
-
-## Features
-
-### Configuration Management
-- `symbolize`: Converts string keys and values in dictionaries to symbols, particularly useful when working with YAML config files and Julia's keyword arguments.
-
-```julia
-using Tools
-using YAML
-
-# Load config file
-config = YAML.load_file("config.yaml")
-
-# Convert string keys/values to symbols
-symbolized_config = symbolize(config)
-```
+A collection of utility functions for Julia programming.
 
 ## Installation
 
-Add the package to your project:
 ```julia
 using Pkg
-Pkg.develop(path="path/to/tools")
+Pkg.add("Tools")
 ```
 
-## Usage Example
+## Features
 
-Given a YAML configuration file:
-```yaml
-defaults:
-  env:
-    atari:
-      name: "pong"
-      repeat: 4
-      size: [84, 84]
-      actions: "all"
-```
+### Space
 
-You can easily convert it to a symbol-based dictionary:
+A flexible space definition system for defining bounded spaces of different data types and dimensions. Inspired by the [elements package](https://github.com/danijar/elements/blob/main/elements/space.py).
+
 ```julia
 using Tools
-using YAML
 
-config = YAML.load_file("config.yaml")
-symbolized = symbolize(config)
-# Result: Dict(:defaults => Dict(:env => Dict(:atari => Dict(:name => :pong...))))
+# Create a 2D continuous space of Float64 values between -1 and 1
+box_2d = Space(Float64, (2,), low=-1.0, high=1.0)
+
+# Create a discrete space of 3 integers from 0 to 10
+discrete_space = Space(Int64, 3, low=0, high=10)
+
+# Create a boolean space of shape (2,2)
+bool_grid = Space(Bool, (2,2))
+
+# Sample from the space
+sample(box_2d)  # Returns a random point in the space
+value in box_2d  # Check if a value is within the space bounds
 ```
 
-## Contributing
+### Symbolize
 
-Feel free to open issues or submit pull requests with additional utilities that could benefit the research community.
+A utility for converting strings and dictionary keys/values to symbols, particularly useful when working with configuration files.
 
-## License
+```julia
+using Tools
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+# Convert a string to symbol
+symbolize("hello")  # Returns :hello
+
+# Convert nested dictionary keys and string values to symbols
+config = Dict(
+    "defaults" => Dict(
+        "env" => Dict(
+            "name" => "pong",
+            "size" => [84, 84]
+        )
+    )
+)
+
+symbolized = symbolize(config)
+# Returns Dict(
+#     :defaults => Dict(
+#         :env => Dict(
+#             :name => :pong,
+#             :size => [84, 84]  # Non-string values remain unchanged
+#         )
+#     )
+# )
+```
