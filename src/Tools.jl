@@ -1,7 +1,8 @@
 module Tools
 
-export symbolize
+export symbolize, Space, sample
 
 include("symbolize.jl")
+include("Space.jl")
 
 end 
