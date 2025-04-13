@@ -167,9 +167,34 @@ end
 Pretty print a space.
 """
 function Base.show(io::IO, space::Space)
-    low_val = isnothing(space.low) ? nothing : minimum(space.low)
-    high_val = isnothing(space.high) ? nothing : maximum(space.high)
+    if isempty(space.size)
+        # Display scalar bounds directly for 0-dimensional spaces
+        low_val = isnothing(space.low) ? nothing : space.low[]
+        high_val = isnothing(space.high) ? nothing : space.high[]
+    else
+        # Display min/max for array bounds
+        low_val = isnothing(space.low) ? nothing : minimum(space.low)
+        high_val = isnothing(space.high) ? nothing : maximum(space.high)
+    end
     print(io, "Space($(space.dtype), size=$(space.size), low=$(low_val), high=$(high_val))")
+end
+
+"""
+    getproperty(space::Space, sym::Symbol)
+
+Overload property access for Space.
+If the space is scalar (size is empty) and the property is :low or :high,
+return the scalar value directly instead of the 0-dimensional array.
+"""
+function Base.getproperty(space::Space, sym::Symbol)
+    if (sym === :low || sym === :high) && isempty(space.size)
+        val = getfield(space, sym)
+        # Return the scalar value if it's not nothing
+        return isnothing(val) ? nothing : val[]
+    else
+        # Default behavior for other properties or non-scalar spaces
+        return getfield(space, sym)
+    end
 end
 
 
