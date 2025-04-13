@@ -147,7 +147,13 @@ function sample(space::Space)
         return rand(space.size) .* (space.high .- space.low) .+ space.low
     elseif space.dtype <: Integer
         # Sample integers uniformly between low and high
-        return rand(space.low:space.high)
+        if isempty(space.size)
+            # Handle scalar case by extracting bounds
+            return rand(space.low[]:space.high[])
+        else
+            # Handle array case by sampling from each range element-wise
+            return rand.(UnitRange.(space.low, space.high))
+        end
     elseif space.dtype == Bool
         return rand(Bool, space.size)
     else
